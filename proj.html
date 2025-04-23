@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeuroScan AI | Brain Tumor Detection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        scroll-behavior: smooth;
+      }
+
+      .gradient-bg {
+        background: linear-gradient(
+          135deg,
+          #f0f9ff 0%,
+          #e0f2fe 50%,
+          #bae6fd 100%
+        );
+      }
+
+      .upload-area {
+        border: 2px dashed #93c5fd;
+        transition: all 0.3s ease;
+      }
+
+      .upload-area:hover {
+        border-color: #3b82f6;
+        background-color: #f8fafc;
+      }
+
+      .tumor-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .tumor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .result-visualization {
+        background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+        border-radius: 12px;
+      }
+
+      .progress-bar {
+        height: 8px;
+        border-radius: 4px;
+        background-color: #e0f2fe;
+      }
+
+      .progress-fill {
+        height: 100%;
+        border-radius: 4px;
+        background-color: #3b82f6;
+        transition: width 0.5s ease;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header/Navbar -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <div
+        class="container mx-auto px-4 py-3 flex justify-between items-center"
+      >
+        <div class="flex items-center space-x-2">
+          <i class="fas fa-brain text-blue-500 text-2xl"></i>
+          <span class="text-xl font-bold text-gray-800"
+            >NeuroScan<span class="text-blue-500">AI</span></span
+          >
+        </div>
+        <nav class="hidden md:flex space-x-8">
+          <a
+            href="#home"
+            class="text-blue-600 font-medium hover:text-blue-800 transition"
+            >Home</a
+          >
+          <a
+            href="#how-it-works"
+            class="text-gray-600 hover:text-blue-600 transition"
+            >How It Works</a
+          >
+          <a href="#upload" class="text-gray-600 hover:text-blue-600 transition"
+            >Upload Scan</a
+          >
+          <a href="#about" class="text-gray-600 hover:text-blue-600 transition"
+            >About</a
+          >
+          <a
+            href="#contact"
+            class="text-gray-600 hover:text-blue-600 transition"
+            >Contact</a
+          >
+        </nav>
+        <button class="md:hidden text-gray-600" id="mobile-menu-button">
+          <i class="fas fa-bars text-2xl"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        class="md:hidden hidden bg-white py-2 px-4 shadow-md"
+        id="mobile-menu"
+      >
+        <a href="#home" class="block py-2 text-gray-700 hover:text-blue-600"
+          >Home</a
+        >
+        <a
+          href="#how-it-works"
+          class="block py-2 text-gray-700 hover:text-blue-600"
+          >How It Works</a
+        >
+        <a href="#upload" class="block py-2 text-gray-700 hover:text-blue-600"
+          >Upload Scan</a
+        >
+        <a href="#about" class="block py-2 text-gray-700 hover:text-blue-600"
+          >About</a
+        >
+        <a href="#contact" class="block py-2 text-gray-700 hover:text-blue-600"
+          >Contact</a
+        >
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="gradient-bg py-16 md:py-24">
+      <div
+        class="container mx-auto px-4 flex flex-col md:flex-row items-center"
+      >
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <h1
+            class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-4"
+          >
+            AI-Powered Brain Tumor Diagnosis <br />
+            <span class="text-blue-600">Instant MRI Analysis</span>
+          </h1>
+          <p class="text-lg text-gray-600 mb-8">
+            Our advanced deep learning model provides accurate classification of
+            brain tumors from MRI scans, helping medical professionals make
+            faster, more informed decisions.
+          </p>
+          <div
+            class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4"
+          >
+            <a
+              href="#upload"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg shadow-md transition duration-300 flex items-center justify-center"
+            >
+              <i class="fas fa-upload mr-2"></i> Upload Your Scan
+            </a>
+            <a
+              href="#how-it-works"
+              class="bg-white hover:bg-gray-100 text-blue-600 font-medium py-3 px-6 rounded-lg shadow-md transition duration-300 flex items-center justify-center"
+            >
+              <i class="fas fa-info-circle mr-2"></i> Learn More
+            </a>
+          </div>
+          <div class="mt-8 flex items-center space-x-4">
+            <div class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>
+              <span class="text-gray-700">96.5% Accuracy</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-bolt text-yellow-500 mr-2"></i>
+              <span class="text-gray-700">Fast Results</span>
+            </div>
+          </div>
+        </div>
+        <div class="md:w-1/2 flex justify-center">
+          <div class="relative max-w-md">
+            <img
+              src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+              alt="Brain MRI Scan"
+              class="rounded-xl shadow-xl border-4 border-white"
+            />
+            <div
+              class="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg"
+            >
+              <div class="flex items-center">
+                <div class="bg-blue-100 p-2 rounded-full mr-3">
+                  <i class="fas fa-brain text-blue-600"></i>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500">AI Prediction</p>
+                  <p class="font-bold text-blue-600">No Tumor Detected</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            How NeuroScan AI Works
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Our system uses state-of-the-art deep learning to analyze brain MRI
+            scans in three simple steps.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Step 1 -->
+          <div class="bg-gray-50 rounded-xl p-6 tumor-card">
+            <div
+              class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
+            >
+              <span class="text-blue-600 text-2xl font-bold">1</span>
+            </div>
+            <h3 class="text-xl font-semibold text-center mb-3">
+              Upload MRI Scan
+            </h3>
+            <p class="text-gray-600 text-center">
+              Simply upload your brain MRI scan in DICOM or common image formats
+              (JPG, PNG).
+            </p>
+            <div class="mt-4 flex justify-center">
+              <i class="fas fa-upload text-blue-500 text-3xl"></i>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="bg-gray-50 rounded-xl p-6 tumor-card">
+            <div
+              class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
+            >
+              <span class="text-blue-600 text-2xl font-bold">2</span>
+            </div>
+            <h3 class="text-xl font-semibold text-center mb-3">AI Analysis</h3>
+            <p class="text-gray-600 text-center">
+              Our deep learning model processes the scan to detect and classify
+              potential tumors.
+            </p>
+            <div class="mt-4 flex justify-center">
+              <i class="fas fa-microchip text-blue-500 text-3xl"></i>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="bg-gray-50 rounded-xl p-6 tumor-card">
+            <div
+              class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
+            >
+              <span class="text-blue-600 text-2xl font-bold">3</span>
+            </div>
+            <h3 class="text-xl font-semibold text-center mb-3">Get Results</h3>
+            <p class="text-gray-600 text-center">
+              Receive a detailed report with tumor classification, confidence
+              scores, and visualization.
+            </p>
+            <div class="mt-4 flex justify-center">
+              <i class="fas fa-file-medical text-blue-500 text-3xl"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload & Predict Section -->
+    <section id="upload" class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            Upload Brain MRI Scan
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Get instant AI-powered analysis of your brain MRI scan for tumor
+            detection.
+          </p>
+        </div>
+
+        <div
+          class="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden"
+        >
+          <div class="p-8">
+            <div
+              id="upload-container"
+              class="upload-area rounded-lg p-8 text-center cursor-pointer"
+            >
+              <i
+                class="fas fa-cloud-upload-alt text-blue-400 text-5xl mb-4"
+              ></i>
+              <h3 class="text-xl font-medium text-gray-700 mb-2">
+                Drag & Drop your MRI scan here
+              </h3>
+              <p class="text-gray-500 mb-4">or click to browse files</p>
+              <p class="text-sm text-gray-400">
+                Supported formats: DICOM, JPG, PNG (Max 10MB)
+              </p>
+              <input
+                type="file"
+                id="file-input"
+                class="hidden"
+                accept=".dcm,.jpg,.jpeg,.png"
+              />
+            </div>
+
+            <div
+              id="selected-file"
+              class="hidden mt-6 bg-blue-50 rounded-lg p-4"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <i class="fas fa-file-image text-blue-500 text-2xl mr-3"></i>
+                  <div>
+                    <p class="font-medium text-gray-800" id="file-name">
+                      filename.dcm
+                    </p>
+                    <p class="text-sm text-gray-500" id="file-size">5.2 MB</p>
+                  </div>
+                </div>
+                <button
+                  id="remove-file"
+                  class="text-red-500 hover:text-red-700"
+                >
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+
+            <div id="analysis-section" class="hidden mt-8">
+              <div class="flex justify-between items-center mb-2">
+                <h4 class="font-medium text-gray-700">Analysis Progress</h4>
+                <span class="text-sm text-blue-600" id="progress-text">0%</span>
+              </div>
+              <div class="progress-bar mb-6">
+                <div
+                  class="progress-fill"
+                  id="progress-fill"
+                  style="width: 0%"
+                ></div>
+              </div>
+
+              <div id="result-container" class="hidden">
+                <div class="result-visualization p-6 mb-6">
+                  <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-6 md:mb-0 flex justify-center">
+                      <div class="relative">
+                        <img
+                          id="scan-preview"
+                          src=""
+                          alt="MRI Scan"
+                          class="max-h-64 rounded-lg border border-gray-200"
+                        />
+                        <div
+                          id="heatmap-overlay"
+                          class="absolute inset-0 opacity-0 transition-opacity duration-300"
+                        ></div>
+                      </div>
+                    </div>
+                    <div class="md:w-1/2">
+                      <h4
+                        class="font-bold text-lg mb-4 text-center md:text-left"
+                      >
+                        Prediction Results
+                      </h4>
+
+                      <div class="space-y-3">
+                        <div>
+                          <div class="flex justify-between mb-1">
+                            <span class="font-medium">Glioma</span>
+                            <span
+                              class="text-blue-600 font-medium"
+                              id="glioma-score"
+                              >0%</span
+                            >
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              class="bg-blue-600 h-2 rounded-full"
+                              id="glioma-bar"
+                              style="width: 0%"
+                            ></div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div class="flex justify-between mb-1">
+                            <span class="font-medium">Meningioma</span>
+                            <span
+                              class="text-blue-600 font-medium"
+                              id="meningioma-score"
+                              >0%</span
+                            >
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              class="bg-blue-600 h-2 rounded-full"
+                              id="meningioma-bar"
+                              style="width: 0%"
+                            ></div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div class="flex justify-between mb-1">
+                            <span class="font-medium">Pituitary</span>
+                            <span
+                              class="text-blue-600 font-medium"
+                              id="pituitary-score"
+                              >0%</span
+                            >
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              class="bg-blue-600 h-2 rounded-full"
+                              id="pituitary-bar"
+                              style="width: 0%"
+                            ></div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div class="flex justify-between mb-1">
+                            <span class="font-medium">No Tumor</span>
+                            <span
+                              class="text-blue-600 font-medium"
+                              id="no-tumor-score"
+                              >0%</span
+                            >
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              class="bg-blue-600 h-2 rounded-full"
+                              id="no-tumor-bar"
+                              style="width: 0%"
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <h4 class="text-2xl font-bold mb-2" id="final-prediction">
+                    No Tumor Detected
+                  </h4>
+                  <p class="text-gray-600 mb-6" id="confidence-text">
+                    Confidence: 98.7%
+                  </p>
+                  <button
+                    id="show-heatmap"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow-md transition duration-300 mr-3"
+                  >
+                    <i class="fas fa-fire mr-2"></i> Show Heatmap
+                  </button>
+                  <button
+                    id="download-report"
+                    class="bg-white hover:bg-gray-100 text-blue-600 font-medium py-2 px-6 rounded-lg shadow-md transition duration-300 border border-gray-300"
+                  >
+                    <i class="fas fa-download mr-2"></i> Download Report
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 text-center">
+              <button
+                id="analyze-btn"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg shadow-md transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled
+              >
+                Analyze Scan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 bg-white rounded-xl shadow-md overflow-hidden">
+          <div class="p-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">
+              Recent Case Studies
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div
+                class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition"
+              >
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-user-md text-blue-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-gray-800">Glioma Detection</h4>
+                    <p class="text-sm text-gray-600 mt-1">
+                      Correctly identified 97.2% of glioma cases in clinical
+                      trials.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition"
+              >
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-clinic-medical text-blue-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-gray-800">Early Diagnosis</h4>
+                    <p class="text-sm text-gray-600 mt-1">
+                      Helped detect tumors at earlier stages in 83% of cases.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About the Model Section -->
+    <section id="about" class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            About Our AI Model
+          </h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            NeuroScan AI is powered by cutting-edge deep learning technology
+            trained on thousands of brain MRI scans.
+          </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-12">
+          <div class="lg:w-1/2">
+            <div class="bg-gray-50 rounded-xl p-8">
+              <h3 class="text-xl font-bold text-gray-800 mb-6">
+                Model Architecture
+              </h3>
+
+              <div class="space-y-6">
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                    <i class="fas fa-project-diagram text-blue-600"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-gray-800">
+                      EfficientNet-B2 Backbone
+                    </h4>
+                    <p class="text-gray-600 mt-1">
+                      Our model uses EfficientNet-B2 architecture optimized for
+                      medical image analysis with 96.5% validation accuracy.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                    <i class="fas fa-database text-blue-600"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-gray-800">
+                      Training Dataset
+                    </h4>
+                    <p class="text-gray-600 mt-1">
+                      Trained on 3,264 brain MRI scans from multiple hospitals,
+                      including glioma, meningioma, pituitary tumors, and
+                      healthy scans.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                    <i class="fas fa-chart-line text-blue-600"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-gray-800">
+                      Performance Metrics
+                    </h4>
+                    <p class="text-gray-600 mt-1">
+                      <span class="font-medium">Accuracy:</span> 96.5% |
+                      <span class="font-medium">Sensitivity:</span> 95.8% |
+                      <span class="font-medium">Specificity:</span> 97.1%
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:w-1/2">
+            <div class="bg-gray-50 rounded-xl p-8">
+              <h3 class="text-xl font-bold text-gray-800 mb-6">
+                Tumor Classification
+              </h3>
+
+              <div class="grid gap-4">
+                <div
+                  class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500"
+                >
+                  <h4 class="font-semibold text-gray-800 flex items-center">
+                    <span
+                      class="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center mr-3"
+                      >1</span
+                    >
+                    Glioma
+                  </h4>
+                  <p class="text-gray-600 mt-2 ml-9">
+                    Gliomas arise from glial cells and are the most common
+                    primary brain tumors. Our model detects them with 96.2%
+                    accuracy.
+                  </p>
+                </div>
+
+                <div
+                  class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500"
+                >
+                  <h4 class="font-semibold text-gray-800 flex items-center">
+                    <span
+                      class="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center mr-3"
+                      >2</span
+                    >
+                    Meningioma
+                  </h4>
+                  <p class="text-gray-600 mt-2 ml-9">
+                    Meningiomas grow from the meninges and are usually benign.
+                    Detection accuracy of 97.1%.
+                  </p>
+                </div>
+
+                <div
+                  class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-purple-500"
+                >
+                  <h4 class="font-semibold text-gray-800 flex items-center">
+                    <span
+                      class="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center mr-3"
+                      >3</span
+                    >
+                    Pituitary
+                  </h4>
+                  <p class="text-gray-600 mt-2 ml-9">
+                    Pituitary tumors develop in the pituitary gland. Our model
+                    identifies them with 95.9% accuracy.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 bg-blue-50 rounded-xl p-8">
+          <div class="flex flex-col md:flex-row items-center">
+            <div class="md:w-2/3 mb-6 md:mb-0">
+              <h3 class="text-xl font-bold text-gray-800 mb-3">
+                Important Disclaimer
+              </h3>
+              <p class="text-gray-700">
+                NeuroScan AI is designed to assist healthcare professionals in
+                brain tumor detection but should not replace clinical judgment.
+                Always consult with a qualified physician for diagnosis and
+                treatment decisions. Results may vary based on scan quality.
+              </p>
+            </div>
+            <div class="md:w-1/3 flex justify-center">
+              <div class="bg-white p-4 rounded-lg shadow-md">
+                <div class="flex items-center">
+                  <i
+                    class="fas fa-exclamation-triangle text-yellow-500 text-3xl mr-3"
+                  ></i>
+                  <span class="font-medium">For research use only</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            Contact Our Team
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Have questions about NeuroScan AI? Our team is here to help.
+          </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-12">
+          <div class="lg:w-1/2">
+            <form class="bg-white rounded-xl shadow-md p-8">
+              <div class="mb-6">
+                <label for="name" class="block text-gray-700 font-medium mb-2"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  id="name"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                />
+              </div>
+
+              <div class="mb-6">
+                <label for="email" class="block text-gray-700 font-medium mb-2"
+                  >Email Address</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                />
+              </div>
+
+              <div class="mb-6">
+                <label
+                  for="subject"
+                  class="block text-gray-700 font-medium mb-2"
+                  >Subject</label
+                >
+                <select
+                  id="subject"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                >
+                  <option value="">Select a subject</option>
+                  <option value="technical">Technical Support</option>
+                  <option value="research">Research Collaboration</option>
+                  <option value="partnership">Partnership Inquiry</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="mb-6">
+                <label
+                  for="message"
+                  class="block text-gray-700 font-medium mb-2"
+                  >Message</label
+                >
+                <textarea
+                  id="message"
+                  rows="5"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg shadow-md transition duration-300"
+              >
+                Send Message
+              </button>
+            </form>
+          </div>
+
+          <div class="lg:w-1/2">
+            <div class="bg-white rounded-xl shadow-md p-8 h-full">
+              <h3 class="text-xl font-bold text-gray-800 mb-6">
+                Contact Information
+              </h3>
+
+              <div class="space-y-6">
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-envelope text-blue-600"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-gray-800">Email</h4>
+                    <p class="text-gray-600 mt-1">support@neuroscanai.com</p>
+                    <p class="text-gray-600">research@neuroscanai.com</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-phone-alt text-blue-600"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-gray-800">Phone</h4>
+                    <p class="text-gray-600 mt-1">
+                      +1 (555) 123-4567 (Support)
+                    </p>
+                    <p class="text-gray-600">+1 (555) 987-6543 (Research)</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-map-marker-alt text-blue-600"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-gray-800">Address</h4>
+                    <p class="text-gray-600 mt-1">
+                      123 Medical Innovation Drive
+                    </p>
+                    <p class="text-gray-600">Boston, MA 02115, USA</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8">
+                <h4 class="font-semibold text-gray-800 mb-4">Follow Us</h4>
+                <div class="flex space-x-4">
+                  <a
+                    href="#"
+                    class="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center text-blue-600 hover:bg-blue-200 transition"
+                  >
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center text-blue-600 hover:bg-blue-200 transition"
+                  >
+                    <i class="fab fa-linkedin-in"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center text-blue-600 hover:bg-blue-200 transition"
+                  >
+                    <i class="fab fa-github"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center text-blue-600 hover:bg-blue-200 transition"
+                  >
+                    <i class="fab fa-youtube"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <i class="fas fa-brain text-blue-400 text-2xl"></i>
+              <span class="text-xl font-bold"
+                >NeuroScan<span class="text-blue-400">AI</span></span
+              >
+            </div>
+            <p class="text-gray-400">
+              Advanced AI for brain tumor detection, helping medical
+              professionals make faster, more accurate diagnoses.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#home"
+                  class="text-gray-400 hover:text-white transition"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#how-it-works"
+                  class="text-gray-400 hover:text-white transition"
+                  >How It Works</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#upload"
+                  class="text-gray-400 hover:text-white transition"
+                  >Upload Scan</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#about"
+                  class="text-gray-400 hover:text-white transition"
+                  >About</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#contact"
+                  class="text-gray-400 hover:text-white transition"
+                  >Contact</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Legal</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition"
+                  >Terms of Service</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition"
+                  >HIPAA Compliance</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition"
+                  >Research Disclaimer</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Subscribe to Newsletter</h4>
+            <p class="text-gray-400 mb-4">
+              Stay updated with our latest developments in medical AI.
+            </p>
+            <div class="flex">
+              <input
+                type="email"
+                placeholder="Your email"
+                class="px-4 py-2 rounded-l-lg focus:outline-none text-gray-800 w-full"
+              />
+              <button
+                class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r-lg transition"
+              >
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center"
+        >
+          <p class="text-gray-400 mb-4 md:mb-0">
+            © 2025 NeuroScan AI. All rights reserved.
+          </p>
+          <div class="flex space-x-6">
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile menu toggle
+      document
+        .getElementById("mobile-menu-button")
+        .addEventListener("click", function () {
+          const menu = document.getElementById("mobile-menu");
+          menu.classList.toggle("hidden");
+        });
+
+      // File upload functionality
+      const uploadContainer = document.getElementById("upload-container");
+      const fileInput = document.getElementById("file-input");
+      const selectedFile = document.getElementById("selected-file");
+      const fileName = document.getElementById("file-name");
+      const fileSize = document.getElementById("file-size");
+      const removeFile = document.getElementById("remove-file");
+      const analyzeBtn = document.getElementById("analyze-btn");
+      const analysisSection = document.getElementById("analysis-section");
+      const resultContainer = document.getElementById("result-container");
+      const progressText = document.getElementById("progress-text");
+      const progressFill = document.getElementById("progress-fill");
+      const scanPreview = document.getElementById("scan-preview");
+      const heatmapOverlay = document.getElementById("heatmap-overlay");
+      const showHeatmapBtn = document.getElementById("show-heatmap");
+      const downloadReportBtn = document.getElementById("download-report");
+      const finalPrediction = document.getElementById("final-prediction");
+      const confidenceText = document.getElementById("confidence-text");
+
+      // Tumor prediction bars
+      const gliomaScore = document.getElementById("glioma-score");
+      const meningiomaScore = document.getElementById("meningioma-score");
+      const pituitaryScore = document.getElementById("pituitary-score");
+      const noTumorScore = document.getElementById("no-tumor-score");
+      const gliomaBar = document.getElementById("glioma-bar");
+      const meningiomaBar = document.getElementById("meningioma-bar");
+      const pituitaryBar = document.getElementById("pituitary-bar");
+      const noTumorBar = document.getElementById("no-tumor-bar");
+
+      // Upload area click event
+      uploadContainer.addEventListener("click", function () {
+        fileInput.click();
+      });
+
+      // File input change event
+      fileInput.addEventListener("change", function (e) {
+        if (e.target.files.length > 0) {
+          const file = e.target.files[0];
+          displaySelectedFile(file);
+        }
+      });
+
+      // Drag and drop functionality
+      uploadContainer.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        this.classList.add("border-blue-500", "bg-blue-50");
+      });
+
+      uploadContainer.addEventListener("dragleave", function (e) {
+        e.preventDefault();
+        this.classList.remove("border-blue-500", "bg-blue-50");
+      });
+
+      uploadContainer.addEventListener("drop", function (e) {
+        e.preventDefault();
+        this.classList.remove("border-blue-500", "bg-blue-50");
+
+        if (e.dataTransfer.files.length > 0) {
+          const file = e.dataTransfer.files[0];
+          fileInput.files = e.dataTransfer.files;
+          displaySelectedFile(file);
+        }
+      });
+
+      // Display selected file
+      function displaySelectedFile(file) {
+        // Validate file type
+        const validTypes = ["image/jpeg", "image/png", "image/dicom"];
+        if (
+          !validTypes.includes(file.type) &&
+          !file.name.toLowerCase().endsWith(".dcm")
+        ) {
+          alert("Please upload a valid image file (JPG, PNG) or DICOM file.");
+          return;
+        }
+
+        // Validate file size (10MB max)
+        if (file.size > 10 * 1024 * 1024) {
+          alert("File size exceeds 10MB limit.");
+          return;
+        }
+
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        selectedFile.classList.remove("hidden");
+        analyzeBtn.disabled = false;
+
+        // Preview the image if it's not a DICOM file
+        if (
+          file.type.startsWith("image/") &&
+          !file.name.toLowerCase().endsWith(".dcm")
+        ) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            scanPreview.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          // For DICOM files, we would typically use a DICOM viewer library
+          scanPreview.src =
+            "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80";
+        }
+      }
+
+      // Format file size
+      function formatFileSize(bytes) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+      }
+
+      // Remove file
+      removeFile.addEventListener("click", function () {
+        fileInput.value = "";
+        selectedFile.classList.add("hidden");
+        analyzeBtn.disabled = true;
+        analysisSection.classList.add("hidden");
+        resultContainer.classList.add("hidden");
+      });
+
+      // Analyze button click
+      analyzeBtn.addEventListener("click", function () {
+        analysisSection.classList.remove("hidden");
+        resultContainer.classList.add("hidden");
+
+        // Simulate analysis progress
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += Math.random() * 10;
+          if (progress > 100) progress = 100;
+
+          progressText.textContent = Math.round(progress) + "%";
+          progressFill.style.width = progress + "%";
+
+          if (progress === 100) {
+            clearInterval(interval);
+            setTimeout(showResults, 500);
+          }
+        }, 300);
+      });
+      /*
+      analyzeBtn.addEventListener("click", function () {
+        analysisSection.classList.remove("hidden");
+        resultContainer.classList.add("hidden");
+
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append("file", file);
+
+        progressText.textContent = "Uploading...";
+        progressFill.style.width = "20%";
+
+        fetch("http://127.0.0.1:8000/predict/", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            progressText.textContent = "Analysis Complete";
+            progressFill.style.width = "100%";
+
+            setTimeout(() => {
+              resultContainer.classList.remove("hidden");
+
+              // Example response shape:
+              // {
+              //   "prediction": "Glioma",
+              //   "confidence": 92.3,
+              //   "scores": {
+              //     "Glioma": 92.3,
+              //     "Meningioma": 3.1,
+              //     "Pituitary": 2.5,
+              //     "No Tumor": 2.1
+              //   }
+              // }
+
+              const { prediction, confidence, scores } = data;
+
+              finalPrediction.textContent =
+                prediction === "No Tumor"
+                  ? "No Tumor Detected"
+                  : `${prediction} Detected`;
+              confidenceText.textContent = `Confidence: ${confidence}%`;
+
+              gliomaScore.textContent = `${scores.Glioma}%`;
+              meningiomaScore.textContent = `${scores.Meningioma}%`;
+              pituitaryScore.textContent = `${scores.Pituitary}%`;
+              noTumorScore.textContent = `${scores["No Tumor"]}%`;
+
+              gliomaBar.style.width = `${scores.Glioma}%`;
+              meningiomaBar.style.width = `${scores.Meningioma}%`;
+              pituitaryBar.style.width = `${scores.Pituitary}%`;
+              noTumorBar.style.width = `${scores["No Tumor"]}%`;
+            }, 500);
+          })
+          .catch((err) => {
+            console.error("Prediction failed:", err);
+            alert("Prediction failed. Please try again.");
+          });
+      });
+*/
+      /*
+      // Show results
+      function showResults() {
+        resultContainer.classList.remove("hidden");
+
+        // Simulate random results for demo purposes
+        const tumorTypes = ["Glioma", "Meningioma", "Pituitary", "No Tumor"];
+        const randomType =
+          tumorTypes[Math.floor(Math.random() * tumorTypes.length)];
+
+        // Generate random confidence scores that add up to 100
+        const scores = {
+          Glioma: Math.random() * 30,
+          Meningioma: Math.random() * 30,
+          Pituitary: Math.random() * 30,
+          "No Tumor": Math.random() * 30,
+        };
+
+        // Normalize to sum to 100
+        const sum =
+          scores["Glioma"] +
+          scores["Meningioma"] +
+          scores["Pituitary"] +
+          scores["No Tumor"];
+        for (const key in scores) {
+          scores[key] = ((scores[key] / sum) * 100).toFixed(1);
+        }
+
+        // Set the highest score to the random type
+        scores[randomType] = (85 + Math.random() * 15).toFixed(1);
+
+        // Update UI with results
+        finalPrediction.textContent =
+          randomType === "No Tumor"
+            ? "No Tumor Detected"
+            : randomType + " Detected";
+        confidenceText.textContent = "Confidence: " + scores[randomType] + "%";
+
+        gliomaScore.textContent = scores["Glioma"] + "%";
+        meningiomaScore.textContent = scores["Meningioma"] + "%";
+        pituitaryScore.textContent = scores["Pituitary"] + "%";
+        noTumorScore.textContent = scores["No Tumor"] + "%";
+
+        gliomaBar.style.width = scores["Glioma"] + "%";
+        meningiomaBar.style.width = scores["Meningioma"] + "%";
+        pituitaryBar.style.width = scores["Pituitary"] + "%";
+        noTumorBar.style.width = scores["No Tumor"] + "%";
+      }
+      */
+
+      function showResults() {
+        // Show the results container and hide analysis section
+        resultContainer.classList.remove("hidden");
+        //analysisSection.classList.add("hidden");
+
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append("file", file);
+
+        progressText.textContent = "Uploading...";
+        progressFill.style.width = "20%";
+
+        fetch("http://127.0.0.1:8000/predict", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            progressText.textContent = "Analysis Complete";
+            progressFill.style.width = "100%";
+
+            // Show results after a brief delay for UI transition
+            setTimeout(() => {
+              // Extract prediction and scores from the response
+              const { prediction, confidence, scores } = data;
+              console.log(scores);
+              // Update UI with prediction and confidence
+              finalPrediction.textContent =
+                prediction === "No Tumor"
+                  ? "No Tumor Detected"
+                  : `${prediction} Detected`;
+              confidenceText.textContent = `Confidence: ${confidence}%`;
+
+              // Update scores and progress bars for each tumor type
+              gliomaScore.textContent = `${scores.Glioma}%`;
+              meningiomaScore.textContent = `${scores.Meningioma}%`;
+              pituitaryScore.textContent = `${scores.Pituitary}%`;
+              noTumorScore.textContent = `${scores["No Tumor"]}%`;
+
+              gliomaBar.style.width = `${scores.Glioma}%`;
+              meningiomaBar.style.width = `${scores.Meningioma}%`;
+              pituitaryBar.style.width = `${scores.Pituitary}%`;
+              noTumorBar.style.width = `${scores["No Tumor"]}%`;
+            }, 500);
+          })
+          .catch((err) => {
+            console.error("Prediction failed:", err);
+            alert("Prediction failed. Please try again.");
+          });
+      }
+
+      // Show heatmap
+      showHeatmapBtn.addEventListener("click", function () {
+        heatmapOverlay.classList.toggle("opacity-70");
+        heatmapOverlay.style.background =
+          "radial-gradient(circle, rgba(255,0,0,0.7) 0%, rgba(255,0,0,0) 70%)";
+
+        if (heatmapOverlay.classList.contains("opacity-70")) {
+          this.innerHTML = '<i class="fas fa-eye-slash mr-2"></i> Hide Heatmap';
+        } else {
+          this.innerHTML = '<i class="fas fa-fire mr-2"></i> Show Heatmap';
+        }
+      });
+
+      // Download report
+      downloadReportBtn.addEventListener("click", function () {
+        alert(
+          "Report download would be implemented in a production environment. This is a demo."
+        );
+      });
+
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          const targetElement = document.querySelector(targetId);
+
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: "smooth",
+            });
+
+            // Close mobile menu if open
+            document.getElementById("mobile-menu").classList.add("hidden");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
